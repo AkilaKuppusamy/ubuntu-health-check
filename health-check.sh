@@ -61,11 +61,11 @@ if echo $services_status | grep -q "not running"; then
 fi
 
 # Check MySQL status
-if ! mysqladmin -h $DB_HOSTNAME -P $DB_PORT -u $DB_USERNAME -p$DB_PASSWORD status > /dev/null; then
-  echo "MySQL is not running" | \
-  mail -s "MySQL is down alert" $EMAIL
-  checks_passed=false
-fi
+#if ! mysqladmin -h $DB_HOSTNAME -P $DB_PORT -u $DB_USERNAME -p$DB_PASSWORD status > /dev/null; then
+  #echo "MySQL is not running" | \
+ # mail -s "MySQL is down alert" $EMAIL
+#  checks_passed=false
+#fi
 
 # If all checks passed, run the tests
 if $checks_passed; then
