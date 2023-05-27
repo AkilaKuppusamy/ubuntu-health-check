@@ -4,11 +4,11 @@
 THRESHOLD_CPU=80
 THRESHOLD_MEM=80
 THRESHOLD_DISK=80
-EMAIL="babu@testleaf.com"
+EMAIL="prakashakila@gmail.com"
 BITNAMI_STATUS_SCRIPT="/opt/bitnami/ctlscript.sh"
 DB_HOSTNAME="127.0.0.1"
 DB_USERNAME="bn_opencart"
-DB_PASSWORD="fe390080a5573e5bbfb0ca29b926fa5529ea60020aec11c5979354f3c128f7b4"
+DB_PASSWORD="cb2a9deeb5ee1c10a1a95a5259fa7869068a4b4ebb564ccce8d8871a7a0621ad"
 DB_DATABASE="bitnami_opencart"
 DB_PORT=3306
 
@@ -16,6 +16,16 @@ DB_PORT=3306
 checks_passed=true
 
 # Check CPU usage
+cpu_usage=$(top -bn1 | grep "Cpu(s)" | sed "s/.*, *\([0-9.]*\)%* id.*/\1/" | awk '{print 100 - $1}')
+
+echo "CPU Usage: $cpu_usage"
+echo "CPU usage is higher than $THRESHOLD_CPU%, it's $cpu_usage%"
+
+if (( $(echo "$cpu_usage > $THRESHOLD_CPU" |bc -l) )); then
+  echo "CPU usage is higher than $THRESHOLD_CPU%, it's $cpu_usage%" | \
+  mail -s "High CPU usage alert" $EMAIL
+  checks_passed=false
+fi
 
 # Check Memory usage
 mem_usage=$(free | grep Mem | awk '{print $3/$2 * 100.0}')
